@@ -20,5 +20,5 @@
 //
 // export { db as Models, sequelize };
 
-export nitAuthLog from './nitAuthLog'
+module.exports.nitAuthLog = require('./nitAuthLog');
 

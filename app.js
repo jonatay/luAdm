@@ -1,5 +1,3 @@
-require('babel-register');
-require('./app');
 
 const express = require('express');
 var path = require('path');
@@ -25,17 +23,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/* init OWN API
- * jrt-170125
- *
- * */
+app.use('/', index);
+app.use('/users', users);
 
+/* init OWN API
+ * jrt-170222
+ * */
 const api = require('./api/api')
 app.use('/api', api);
 
-
-app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

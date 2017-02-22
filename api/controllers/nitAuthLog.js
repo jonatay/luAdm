@@ -1,7 +1,7 @@
-import dateFormat from 'dateformat';
-import _ from 'underscore';
+const dateFormat = require('dateformat');
+const _ = require('underscore');
 
-import {nitAuthLog} from '../models';
+const {nitAuthLog} = require('../models');
 
 Date.prototype.addDays = function (days) {
   const dat = new Date(this.valueOf());
