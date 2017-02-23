@@ -3,12 +3,11 @@
  */
 
 import React from 'react';
+import { NavItem } from 'react-bootstrap';
 
 export const EmployeeItem = (props) => {
 
   return (
-    <div className="Employee-Item">
-      <span><strong>{props.employee_code}</strong> {props.surname}, {props.first_names}</span>
-    </div>
+        <NavItem eventKey={props.id} href="#"><strong>{props.employee_code}</strong> {props.surname}, {props.first_names}</NavItem>
   )
 }

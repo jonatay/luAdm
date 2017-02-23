@@ -2,9 +2,18 @@
  * Created by Jono on 17 02 21.
  */
 
+const apiFetch = (resource) => {
+  return fetch('api/' + resource)
+    .then((res) => {
+      return res.json();
+    });
+}
+
 export const loadEmployees = () => {
-  return fetch('api/employees')
-    .then(res => res.json())
+  return apiFetch('employees')
+    .then((res) => {
+      return res.results;
+    })
     .catch((err) => {
       console.log('whoops:', err);
     });
