@@ -1,0 +1,61 @@
+/**
+ * Created by Jono on 17 03 06.
+ */
+import React, {Component, PropTypes} from 'react';
+
+class MobileTearSheet extends Component {
+
+  static propTypes = {
+    children: PropTypes.node,
+    height: PropTypes.number.isRequired,
+  };
+
+  static defaultProps = {
+    height: 500,
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired,
+  };
+
+  render() {
+    const {
+      prepareStyles,
+    } = this.context.muiTheme;
+
+    const styles = {
+      root: {
+        backgroundColor: 'rgb(48, 48, 48)',
+        marginBottom: 24,
+        marginRight: 24,
+        maxWidth: 360,
+        width: '100%',
+        padding: 5,
+      },
+      container: {
+        border: 'solid 2px #d9d9d9',
+        borderBottom: 'none',
+        //height: this.props.height,
+        overflow: 'auto',
+        padding: 5,
+      },
+      bottomTear: {
+        display: 'block',
+        position: 'relative',
+        marginTop: -10,
+        maxWidth: 360,
+      },
+    };
+
+    return (
+      <div style={prepareStyles(styles.root)}>
+        <div style={prepareStyles(styles.container)}>
+          {this.props.children}
+        </div>
+        <img style={prepareStyles(styles.bottomTear)} alt="tear-off" src="images/bottom-tear.svg" />
+      </div>
+    );
+  }
+}
+
+export default MobileTearSheet;
