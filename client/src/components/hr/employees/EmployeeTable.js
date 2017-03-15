@@ -3,19 +3,37 @@
  */
 
 import React, {
-  Component,
-  PropTypes,
+  // PropTypes,
 } from 'react';
 
-class EmployeeTable extends Component {
-  render() {
-    return (
-      <div></div>
-    );
-  }
-}
+import {Table} from 'semantic-ui-react'
 
-EmployeeTable.propTypes = {};
-EmployeeTable.defaultProps = {};
+const EmployeeTable = (props) => {
+  return (
+    <Table sortable>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell width={1}>code</Table.HeaderCell>
+          <Table.HeaderCell>name</Table.HeaderCell>
+          <Table.HeaderCell>hire</Table.HeaderCell>
+          <Table.HeaderCell>leave</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {props.employees.map(emp =>
+          <Table.Row key={emp.id}>
+            <Table.Cell>{emp.employee_code}</Table.Cell>
+            <Table.Cell>{emp.surname}, {emp.first_names}</Table.Cell>
+            <Table.Cell>{(emp.hire_date > '') ? emp.hire_date.substring(0, 10) : ''}</Table.Cell>
+            <Table.Cell>{(emp.leave_date > '') ? emp.leave_date.substring(0, 10) : ''}</Table.Cell>
+          </Table.Row>)}
+      </Table.Body>
+    </Table>
+  );
+};
+
+// EmployeeTable.propTypes = {};
+// EmployeeTable.defaultProps = {};
 
 export default EmployeeTable;
+

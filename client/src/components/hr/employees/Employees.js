@@ -1,75 +1,65 @@
 /**
  * Created by Jono on 17 03 07.
  */
-import React, {Component}  from 'react';
+import React, {Component}  from 'react'
 
-import {List, ListItem} from 'material-ui/List';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import IconPerson from 'material-ui/svg-icons/social/person-outline';
-import IconChecked from 'material-ui/svg-icons/image/leak-add';
-import IconUnChecked from 'material-ui/svg-icons/image/leak-remove';
-
-
-import EmployeeFilter from './EmployeeFilter';
-import {loadEmployees} from '../../../lib/employeeService';
-
-import MobileTearSheet from '../../lib/MobileTearSheet';
-
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-
-const personIcon = <IconPerson />;
-const checkedIcon = <IconChecked/>;
-const uncheckedIcon = <IconUnChecked/>;
-
+import EmployeeFilter from './EmployeeFilter'
+import EmployeeTable from './EmployeeTable'
+import {loadEmployees} from '../../../lib/employeeService'
 
 class Employees extends Component {
-  style = {
-    tbMain: {
-      padding: 0,
-      // position:'fixed',
-      maxWidth: 350,
-    },
-    tbGroup: {
-      padding: 0,
-    },
-    tbBtn: {
-      padding: 2,
-    },
-    tearSheet: {
-      marginTop: 20,
-    },
-    empFilter: {
-      position: 'fixed',
-    },
-  }
   state = {
     employees: [],
     currentEmployee: {},
-    selectedIndex: 0,
+    empFilter: {
+      company: '',
+      state: 'curr',
+    },
   }
 
   componentDidMount() {
     loadEmployees().then(employees => this.setState({employees}))
   }
 
+  handleFilterCoyClick = (coy) => (this.state.empFilter.company === coy) ? this.setState({
+      empFilter: {
+        company: '',
+        state: this.state.empFilter.state
+      }
+    }) : this.setState({
+      empFilter: {
+        company: coy,
+        state: this.state.empFilter.state
+      }
+    });
+  handleFilterStateClick = (state) => (this.state.empFilter.state === state) ? this.setState({
+      empFilter: {
+        state: '',
+        company: this.state.empFilter.company
+      }
+    }) : this.setState({
+      empFilter: {
+        state: state,
+        company: this.state.empFilter.company
+      }
+    });
 
+  filterEmployees = (list, empFilter) => {
+    return [...list.filter(emp => (
+      (empFilter.company === '' || emp.company_code === empFilter.company) &&
+      (empFilter.state === '' || ( empFilter.state === 'curr' && emp.leave_date == null ))
+    ))]
+
+  }
 
   render() {
-    const dispEmployees = this.state.employees;
+    const displayEmployees = this.filterEmployees(this.state.employees, this.state.empFilter)
     return (
       <div className="Employee-List">
-        <EmployeeFilter/>
-        <MobileTearSheet style={this.style.tearSheet}>
-          <List>
-            {dispEmployees.map(employee =>
-                <ListItem key={employee.id}>
-                  <strong>{employee.employee_code} </strong>
-                  {employee.surname}, {employee.first_names}
-                </ListItem>
-              /*<EmployeeItem key={employee.id} {...employee}/>*/
-            )}
-          </List>
-        </MobileTearSheet>
+        <EmployeeFilter empFilter={this.state.empFilter}
+                        handleFilterCoyClick={this.handleFilterCoyClick}
+                        handleFilterStateClick={this.handleFilterStateClick}/>
+        <EmployeeTable employees={displayEmployees}/>
       </div>
     )
   }

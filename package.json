@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "babel-node ./bin/www",
+    "server": "nodemon ./bin/www",
     "client": "babel-node start-client.js",
     "test": "cd client && react-scripts test --env=jsdom"
   },
@@ -33,6 +33,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "semantic-ui-react": "^0.67.0",
     "serve-favicon": "~2.3.0",
+    "squel": "^5.8.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

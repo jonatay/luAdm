@@ -1,5 +1,7 @@
-var Emp = require('../models/employee');
+// var Emp = require('../models/employee');
 
+const queryLinkup = require('../models/pgLinkup').queryLinkup;
+var squel = require("squel");
 
 var sendJSONresponse = function (res, status, content) {
   res.status(status);
@@ -7,49 +9,47 @@ var sendJSONresponse = function (res, status, content) {
 };
 
 var fetchCols = [
-  'id',
-  'surname',
-  'first_names',
-  'employee_code',
-  'designation',
-  'gender',
-  'race',
-  'id_number',
-  'company_code',
-  'hire_date',
-  'leave_date',
-  'tax_reference_number',
-  'last_updated',
-  'employee_group_id',
-  'employee_cc_id',
-  'branch_id',
-  'empnum'
+  'e.id',
+  'e.surname',
+  'e.first_names',
+  'e.employee_code',
+  'e.designation',
+  'e.gender',
+  'e.race',
+  'e.id_number',
+  'e.company_code',
+  'e.hire_date',
+  'e.leave_date',
+  'e.tax_reference_number',
+  'e.last_updated',
+  'e.employee_group_id',
+  'e.employee_cc_id',
+  'e.branch_id',
+  'e.empnum',
+  'c.name as company',
+  'b.name as branch'
 ];
 
-// employeesList
+
 module.exports.get = (query, done) => {
-  console.log('query:', query)
-  let where = {};
-  if (query.company_code) {
-    where = Object.assign(where, {where: {company_code: query.company_code}})
+  const squ = squel.select({separator: " ", autoQuoteAliasNames: false})
+    .from('hr.employee', 'e')
+  for (fc in fetchCols) {
+    squ.field(fetchCols[fc]);
   }
-  if (query.is_current) {
-    where = Object.assign(where, {where: {leave_date: null}})
-  }
-  if (!query.is_current) {
-    where = Object.assign(where, {whereNot: {leave_date: null}})
-  }
-  Emp
-    .query(where)
-    .fetchAll({
-      columns: fetchCols
-    })
-    .then(data =>
-      done(null, data)
-    )
-    .catch(error =>
-      done(error, null))
-};
+  const sql = squ
+    .left_join('coy.company', 'c', 'e.company_code = c.cubit_company_code')
+    .left_join('coy.branch', 'b', 'e.branch_id = b.id')
+    .where('e.first_names is not null')
+    .order('e.employee_code')
+    .toString();
+  //console.log(sql);
+  queryLinkup(sql, function (err, result) {
+    if (err) done(err, null);
+    done(null, result.rows);
+  })
+}
+
 
 // employeesCreate
 module.exports.employeesCreate = function (req, res) {

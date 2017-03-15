@@ -2,52 +2,48 @@
  * Created by Jono on 17 02 23.
  */
 
-import React, {Component} from 'react'
+import React from 'react'
+
 import {Segment, Button, Input, Icon} from 'semantic-ui-react'
 
-class EmployeeFilter extends Component {
-  state = {filterCoy: '', filterState: 'curr'};
-  handleCoyClick = (coy) => (this.state.filterCoy === coy) ? this.setState({filterCoy: ''}) : this.setState({filterCoy: coy});
-  handleStateClick = (state) => (this.state.filterState === state) ? this.setState({filterState: ''}) : this.setState({filterState: state});
+const EmployeeFilter = (props) => {
+  return (
+    <div>
+      <Segment>
+        <Input icon='search' placeholder='Search...'/>
+        <Button.Group style={{paddingLeft: 10}}>
+          <Button toggle active={props.empFilter.company === 'aaab' || props.empFilter.company === ''}
+                  onClick={() => props.handleFilterCoyClick('aaab')}>
+            <Icon name='user outline'><p className="name">sec</p></Icon>
+          </Button>
+          <Button toggle active={props.empFilter.company === 'aaac' || props.empFilter.company === ''}
+                  onClick={() => props.handleFilterCoyClick('aaac')}>
+            <Icon name='user outline'><p className="name">tec</p></Icon>
+          </Button>
+          <Button toggle active={props.empFilter.company === 'aaad' || props.empFilter.company === ''}
+                  onClick={() => props.handleFilterCoyClick('aaad')}>
+            <Icon name='user outline'><p className="name">rea</p></Icon>
+          </Button>
+        </Button.Group>
+        <Button.Group style={{paddingLeft: 10}}>
+          <Button toggle active={props.empFilter.state === 'curr' || props.empFilter.state === ''}
+                  onClick={() => props.handleFilterStateClick('curr')}>
+            <Icon name='calendar check'><p className="name">curr</p></Icon>
+          </Button>
+          <Button toggle active={props.empFilter.state === 'past' || props.empFilter.state === ''}
+                  onClick={() => props.handleFilterStateClick('past')}>
+            <Icon name='calendar times'><p className="name">past</p></Icon>
+          </Button>
+        </Button.Group>
+      </Segment>
+    </div>
+  )
+};
 
-  render() {
-    return (
-      <div>
-        <Segment style={ {position: 'fixed', zIndex: 10} }>
-          <Input icon='search' placeholder='Search...'/>
-          <Button.Group style={{paddingLeft: 10}}>
-            <Button toggle active={this.state.filterCoy === 'aaab' || this.state.filterCoy === ''}
-                    onClick={() => this.handleCoyClick('aaab')}>
-              <Icon name='user outline'><p className="name">sec</p></Icon>
-            </Button>
-            <Button toggle active={this.state.filterCoy === 'aaac' || this.state.filterCoy === ''}
-                    onClick={() => this.handleCoyClick('aaac')}>
-              <Icon name='user outline'><p className="name">tec</p></Icon>
-            </Button>
-            <Button toggle active={this.state.filterCoy === 'aaad' || this.state.filterCoy === ''}
-                    onClick={() => this.handleCoyClick('aaad')}>
-              <Icon name='user outline'><p className="name">rea</p></Icon>
-            </Button>
-          </Button.Group>
-          <Button.Group style={{paddingLeft: 10}}>
-            <Button toggle active={this.state.filterState === 'curr' || this.state.filterState === ''}
-                    onClick={() => this.handleStateClick('curr')}>
-              <Icon name='calendar check'><p className="name">curr</p></Icon>
-            </Button>
-            <Button toggle active={this.state.filterState === 'past' || this.state.filterState === ''}
-                    onClick={() => this.handleStateClick('past')}>
-              <Icon name='calendar times'><p className="name">past</p></Icon>
-            </Button>
-          </Button.Group>
-        </Segment>
-        <div
-          style={{height: 60}}>{/* this 'uses' the space the toolbar occupies - i.e. no top margin stuffing around */}</div>
-
-      </div>
-    );
-  }
-}
-
+// EmployeeFilter.propTypes = {};
+// EmployeeFilter.defaultProps = {};
+//
+//
 export default EmployeeFilter;
 
 
@@ -55,7 +51,7 @@ export default EmployeeFilter;
 
  <Toolbar style={this.style.tbMain}>
  <ToolbarGroup firstChild={true} style={this.style.tbGroup}>
- <BottomNavigation selectedIndex={this.state.selectedIndex}>
+ <BottomNavigation selectedIndex={props.selectedIndex}>
  <BottomNavigationItem
  label="sec"
  icon={personIcon}
@@ -77,7 +73,7 @@ export default EmployeeFilter;
  </BottomNavigation>
  </ToolbarGroup>
  <ToolbarGroup firstChild={true} style={this.style.tbGroup}>
- <BottomNavigation selectedIndex={this.state.selectedIndex}>
+ <BottomNavigation selectedIndex={props.selectedIndex}>
  <BottomNavigationItem
  label="curr"
  icon={checkedIcon}
